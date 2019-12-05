@@ -8,6 +8,7 @@
 void show_list();
 void add_element(int);
 void del_element(int);
+void del_all_element(int);
 
 struct node{
 	int data;
@@ -22,7 +23,7 @@ void main(){
 	int data;
 
 	do{
-		printf("\n\n\t***LINKED LIST APPLICATION***\n1.Show List\n2.Add element\n3.Delete element\n 0.Exit\n\nEnter choice : ");
+		printf("\n\n\t***LINKED LIST APPLICATION***\n1.Show List\n2.Add element\n3.Delete 1st element\n4.Delete all element\n 0.Exit\n\nEnter choice : ");
 		scanf("%d",&choice);
 
 		switch(choice){
@@ -44,8 +45,15 @@ void main(){
 				scanf("%d",&data);
 				del_element(data);
 				break;
+			case 4:
+				system("clear");
+				printf("Enter data to delete all presence : ");
+				scanf("%d",&data);
+				del_all_element(data);
+				break;
 			case 0:
 				printf("\n...Good bye...\n");
+				break;
 			default:
 				printf("Please enter a valid option...\n");
 
@@ -86,24 +94,47 @@ void del_element(int j){
 	int status = 0;
 	if(t->data == j){
 		head = t->link;
+		status = 1;
 		free(t);
 	}else{
-		struct node *tmp;
-		tmp = t;
-		t = t->link;
 		while(t){
-			if(t->data == j){
-				tmp->link = t->link;
+			if(t->link->data == j){
+				t->link = t->link->link;
 				status = 1;
 				break;
 			}
-			tmp = t;
 			t = t->link;
 		}
 		if(status){
-			printf("%d data deleted\n",j);
+			printf("'%d' deleted\n",j);
 		}else{
-			printf("%d not present in the list\n",j);
+			printf("'%d' not present in the list\n",j);
 		}
 	}
+}
+
+void del_all_element(int j){
+	struct node *t;
+	t = head;
+	int status = 0;
+
+	if(t->data == j){
+		head = t->link;
+		status = 1;
+	}
+	while(t){
+		if(t->link && t->link->link){
+			if(t->link->data == j){
+				t->link = t->link->link;
+				status = 1;
+			}
+		}
+		t = t->link;
+	}
+	if(status){
+		printf("All '%d' deleted\n",j);
+	}else{
+		printf("'%d' not present in the list\n",j);
+	}
+	
 }
